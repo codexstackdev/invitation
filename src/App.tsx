@@ -113,8 +113,7 @@ const movieGift: MovieGiftConfig = {
   title: "A Little Movie Gift",
   dedication: "Settle in, press play, and enjoy this little gift from us.",
   source:
-  "https://cinesrc.st/embed/movie/11036?autoplay=true&controls=false&quality=1080&color=%23c5a77b&subtitle=english"
-    // "https://vidstuck.cc/embed/movie/1339713?branding=agiftfromKentxToni&loading=1&back=false&subtitle=English&color=c5a77b&autoplay=true",
+  `${import.meta.env.VITE_API}?autoplay=true&controls=false&quality=1080&color=%23c5a77b&subtitle=english`
 };
 
 const ease = [0.22, 1, 0.36, 1] as const;
