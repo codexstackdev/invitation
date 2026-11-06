@@ -7,7 +7,7 @@ export default function DisableDevtools() {
   useEffect(() => {
     DisableDevtool({
       disableMenu: true,
-      ondevtoolopen: (type, next) => {
+      ondevtoolopen: () => {
         console.warn("⚠️ DevTools detected. Blocking access...");
         try {
           window.location.href =
