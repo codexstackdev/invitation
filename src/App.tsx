@@ -1,6 +1,13 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import pic1 from "./assets/pic1.jpg";
+import pic2 from "./assets/pic2.jpg";
+import pic3 from "./assets/pic3.jpg";
+import pic4 from "./assets/pic4.jpg";
+import gcash from "./assets/gcash.jpg";
+import man from "./assets/man.jpg";
+import girl from "./assets/girl.jpg";
 
 type PageId = "invitation" | "families" | "entourage" | "details" | "movie";
 type NameListProps = { names: readonly string[]; className?: string };
@@ -16,6 +23,13 @@ type MovieGiftConfig = {
   title: string;
   dedication: string;
   source: string;
+};
+type DonationDetails = {
+  paymentMethod?: string;
+  accountName?: string;
+  accountNumber?: string;
+  qrImage?: string;
+  donationUrl?: string;
 };
 
 const navItems: readonly NavItem[] = [
@@ -83,6 +97,7 @@ const groomsmen: readonly string[] = [
   "Renier Ace Lautrezo",
   "Frank Alarcon",
   "Carlo Paclibar",
+  "Arnold Sobremesena",
 ];
 const bridesmaids: readonly string[] = [
   "Ronalyn Mayordomo",
@@ -113,7 +128,28 @@ const movieGift: MovieGiftConfig = {
   title: "A Little Movie Gift",
   dedication: "Settle in, press play, and enjoy this little gift from us.",
   source:
-  `${import.meta.env.VITE_API}?autoplay=true&controls=false&quality=1080&color=%23c5a77b&subtitle=english`
+  `${import.meta.env.VITE_API}11036?autoplay=true&controls=false&quality=1080&color=%23c5a77b&subtitle=english`
+};
+
+const movieGifts: readonly MovieGiftConfig[] = [
+  movieGift,
+  {
+    title: "Movie Gift 2",
+    dedication: "Thank you for sharing in our special day! Just like the beautiful love story in this film, we are so excited for our next big adventure. Cozy up and enjoy this movie night on us!",
+    source: `${import.meta.env.VITE_API}976573?autoplay=true&controls=false&quality=1080&color=%23c5a77b&subtitle=english`,
+  },
+  {
+    title: "Movie Gift 3",
+    dedication: "We are so grateful to celebrate our happily ever after with you. Pop some popcorn, get cozy, and enjoy this magical love story as a little thank you from us!",
+    source: `${import.meta.env.VITE_API}38757?autoplay=true&controls=false&quality=1080&color=%23c5a77b&subtitle=english`,
+  },
+];
+
+const donationDetails: DonationDetails = {
+  paymentMethod: "GCASH",
+  accountName: "KENT J.",
+  accountNumber: "09668890417",
+  qrImage: gcash,
 };
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -233,13 +269,13 @@ function PhotoPlaceholder({
           initial={reduceMotion ? false : { scale: 1.04 }}
           whileInView={{ scale: 1 }}
           transition={{ duration: 0.8, ease }}
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full pointer-events-none w-full object-cover object-center"
         />
       ) : (
         <div
           role="img"
           aria-label={`${title} photo placeholder`}
-          className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[linear-linear(145deg,#e9ede4_0%,#d7e0d3_48%,#c6d2c4_100%)] px-5 text-center"
+          className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#e9ede4_0%,#d7e0d3_48%,#c6d2c4_100%)] px-5 text-center"
         >
           <span className="absolute -right-10 -top-16 h-52 w-52 rounded-full border border-[#9eaa93]/50" />
           <span className="absolute -bottom-24 -left-10 h-64 w-64 rounded-full border border-[#9eaa93]/40" />
@@ -376,11 +412,13 @@ function InvitationPage({
               title="Kent"
               hint="Groom portrait"
               className="aspect-3/4 w-full"
+              src={man}
             />
             <PhotoPlaceholder
               title="Toni Marie"
               hint="Bride portrait"
               className="aspect-3/4 w-full"
+              src={girl}
             />
           </div>
           <div className="grid gap-4 px-3 pb-3 pt-5 sm:grid-cols-2 sm:px-5 sm:pb-4">
@@ -428,21 +466,30 @@ function InvitationPage({
             A few favorite memories, soon to be shared with you.
           </p>
         </div>
-        <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
           <PhotoPlaceholder
             title="A favorite memory"
             hint="Couple moment · 01"
             className="aspect-4/3 w-full"
+            src={pic1}
           />
           <PhotoPlaceholder
             title="A day to remember"
             hint="Couple moment · 02"
             className="aspect-4/3 w-full"
+            src={pic2}
           />
           <PhotoPlaceholder
             title="Us, together"
             hint="Couple moment · 03"
             className="aspect-4/3 w-full"
+            src={pic3}
+          />
+          <PhotoPlaceholder
+            title="Another favorite memory"
+            hint="Couple moment · 04"
+            className="aspect-4/3 w-full"
+            src={pic4}
           />
         </div>
       </motion.section>
@@ -543,14 +590,14 @@ function FamiliesPage() {
         <div className="grid gap-8 rounded-sm border border-[#e1dccd] bg-[#f8f7ef] p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-3">
           <NameList names={sponsorColumns[0]} />
           <NameList names={sponsorColumns[1]} />
-          <div className="flex flex-col justify-center border-t border-[#d9d2bf] pt-6 sm:col-span-2 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+          {/* <div className="flex flex-col justify-center border-t border-[#d9d2bf] pt-6 sm:col-span-2 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
             <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#9a8450]">
               With special thanks
             </p>
             <p className="mt-3 font-serif text-2xl italic text-[#405747]">
               Arnold Sobremesena
             </p>
-          </div>
+          </div> */}
         </div>
       </motion.div>
     </motion.div>
@@ -705,9 +752,14 @@ function DetailsPage() {
         <SectionHeading eyebrow="A few thoughtful details">
           For Our Guests
         </SectionHeading>
-        <p className="max-w-sm font-serif text-lg italic leading-relaxed text-[#778170]">
-          We can't wait to celebrate this beginning with you.
-        </p>
+        <div className="max-w-sm">
+          <p className="font-serif text-lg italic leading-relaxed text-[#778170]">
+            We can't wait to celebrate this beginning with you.
+          </p>
+          <a href="#donation-details" className="mt-3 inline-flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.17em] text-[#8b794d] underline decoration-[#b9a66f]/60 underline-offset-4 hover:text-[#405747] focus:outline-none focus:ring-2 focus:ring-[#aa9258] focus:ring-offset-2">
+            Jump to donation details <span aria-hidden="true">↓</span>
+          </a>
+        </div>
       </motion.div>
       <motion.section
         variants={rise}
@@ -719,6 +771,7 @@ function DetailsPage() {
             title="San Diego Pro-Cathedral Parish"
             hint="Ceremony venue"
             className="aspect-video w-full"
+            src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh5NNJCJ4klq775q3MBDt3hnslpvaP1sFof_nPzNKmQQG4VoBaN0q9QZw&s=10"}
           />
           <p className="text-[9px] font-semibold uppercase tracking-[0.19em] text-[#8d815d]">
             Ceremony venue
@@ -729,6 +782,7 @@ function DetailsPage() {
             title="Carmencita Hall"
             hint="Reception · Baldivia, Silay City"
             className="aspect-video w-full"
+            src={"https://pix10.agoda.net/hotelImages/27855412/-1/d34759f19ce94c2829b3decc829511e4.jpg?ca=21&ce=0&s=800x600"}
           />
           <p className="text-[9px] font-semibold uppercase tracking-[0.19em] text-[#8d815d]">
             Reception venue
@@ -818,6 +872,55 @@ function DetailsPage() {
       </div>
       <motion.section
         variants={rise}
+        id="donation-details"
+        className="scroll-mt-8 border border-[#cfc5a8] bg-[#f4f1e6] p-6 sm:p-8"
+        aria-labelledby="donation-heading"
+      >
+        <div className="grid gap-7 lg:grid-cols-[1fr_220px] lg:items-center">
+          <div>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#9a8450]">
+              03 / Optional giving
+            </p>
+            <h3 id="donation-heading" className="mt-3 font-serif text-3xl italic text-[#405747]">
+              A Gift for Our Future
+            </h3>
+            <p className="mt-4 max-w-2xl font-serif text-base leading-8 text-[#59675a]">
+              Your presence is the greatest gift. If you would also like to contribute toward our new beginning, we would receive it with heartfelt gratitude. Please know that a gift is entirely optional.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="border border-[#ded7c5] bg-[#faf9f3] p-4">
+                <p className="text-[8px] font-semibold uppercase tracking-[0.2em] text-[#9a8450]">Payment method</p>
+                <p className="mt-2 font-serif text-lg text-[#405747]">{donationDetails.paymentMethod || "Add bank or e-wallet"}</p>
+              </div>
+              <div className="border border-[#ded7c5] bg-[#faf9f3] p-4">
+                <p className="text-[8px] font-semibold uppercase tracking-[0.2em] text-[#9a8450]">Account name</p>
+                <p className="mt-2 font-serif text-lg text-[#405747]">{donationDetails.accountName || "Add account name"}</p>
+              </div>
+              <div className="border border-[#ded7c5] bg-[#faf9f3] p-4 sm:col-span-2">
+                <p className="text-[8px] font-semibold uppercase tracking-[0.2em] text-[#9a8450]">Account / reference number</p>
+                <p className="mt-2 font-serif text-lg text-[#405747]">{donationDetails.accountNumber || "Add account or reference details"}</p>
+              </div>
+            </div>
+            {donationDetails.donationUrl && (
+              <a href={donationDetails.donationUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex min-h-12 items-center justify-center border border-[#aa9258] px-5 font-serif text-lg text-[#56644d] transition hover:bg-[#e9e5d5] focus:outline-none focus:ring-2 focus:ring-[#aa9258] focus:ring-offset-2">
+                Send a gift <span className="ml-3 text-sm" aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+          <div className="mx-auto w-full max-w-55 border border-[#ded7c5] bg-[#faf9f3] p-3 text-center">
+            <div className="flex aspect-square items-center justify-center overflow-hidden border border-dashed border-[#b9a66f] bg-[#f0efe5]">
+              {donationDetails.qrImage ? (
+                <img src={donationDetails.qrImage} alt="Donation QR code" className="h-full w-full object-cover pointer-events-none p-2" />
+              ) : (
+                <div className="px-4"><span className="mx-auto flex h-12 w-12 items-center justify-center border border-[#b9a66f] text-2xl text-[#9a8450]" aria-hidden="true">▦</span><p className="mt-3 text-[8px] font-semibold uppercase tracking-[0.17em] text-[#827b5e]">Add donation QR image</p></div>
+              )}
+            </div>
+            <p className="mt-3 text-[8px] uppercase tracking-[0.16em] text-[#8c8977]">Optional wedding contribution</p>
+          </div>
+        </div>
+      </motion.section>
+      <motion.section
+        variants={rise}
         className="border-t border-[#d9d2bf] pt-7"
       >
         <div className="mb-5 flex items-center gap-5">
@@ -856,7 +959,9 @@ function DetailsPage() {
 }
 
 function MovieGiftPage() {
-  const hasSource = Boolean(movieGift.source);
+  const [selectedGiftIndex, setSelectedGiftIndex] = useState(0);
+  const selectedGift = movieGifts[selectedGiftIndex];
+  const hasSource = Boolean(selectedGift.source);
   return (
     <motion.div
       variants={stagger}
@@ -884,24 +989,32 @@ function MovieGiftPage() {
         />
         <div className="relative overflow-hidden border border-[#34443a] bg-[#17231c] p-2 shadow-[0_24px_70px_rgba(30,44,34,0.22)] sm:p-4">
           <div className="relative aspect-video overflow-hidden bg-[#0d1510]">
-            {movieGift.source && (
+            {hasSource ? (
               <iframe
                 className="h-full w-full border-0"
-                src={movieGift.source}
-                title={movieGift.title}
+                src={selectedGift.source}
+                title={selectedGift.title}
                 sandbox="allow-scripts allow-same-origin allow-orientation-lock allow-presentation allow-fullscreen"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_50%_42%,rgba(114,132,99,0.35),transparent_58%),linear-gradient(145deg,#233229,#101813_70%)] px-5 text-center">
+                <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-[#c1aa6e]/60 text-[#d4bd7c]" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" className="ml-1 h-7 w-7" fill="currentColor"><path d="M7 4.8c0-.78.86-1.26 1.53-.85l10.1 6.2a1 1 0 0 1 0 1.7l-10.1 6.2A1 1 0 0 1 7 17.2V4.8Z"/></svg>
+                </span>
+                <p className="font-serif text-2xl italic text-[#f3f0e4]">{selectedGift.title}</p>
+                <p className="mt-3 text-[9px] font-medium uppercase tracking-[0.2em] text-[#c6b77f]">Add a movie source to this gift slot</p>
+              </div>
             )}
           </div>
           <div className="flex flex-col justify-between gap-2 px-2 py-3 sm:flex-row sm:items-center sm:px-3 sm:py-4">
             <div>
               <p className="font-serif text-lg italic text-[#f3f0e4]">
-                {movieGift.title}
+                {selectedGift.title}
               </p>
               <p className="mt-1 text-xs text-[#c1c9bc]/70">
-                {movieGift.dedication}
+                {selectedGift.dedication}
               </p>
             </div>
             <span className="inline-flex w-fit items-center gap-2 border border-[#b39a5d]/40 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#d4bd7c]">
@@ -913,6 +1026,37 @@ function MovieGiftPage() {
           </div>
         </div>
       </motion.div>
+
+      <motion.section variants={rise} className="mx-auto max-w-4xl" aria-labelledby="movie-selection-heading">
+        <div className="mb-4 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#9a8450]">Choose your gift</p>
+            <h3 id="movie-selection-heading" className="mt-2 font-serif text-2xl italic text-[#405747]">Select a movie</h3>
+          </div>
+          <p className="text-xs text-[#778170]">Pick one of the three films to load it above.</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {movieGifts.map((gift, index) => {
+            const isSelected = index === selectedGiftIndex;
+            const isAvailable = Boolean(gift.source);
+            return (
+              <motion.button
+                key={`${gift.title}-${index}`}
+                type="button"
+                onClick={() => setSelectedGiftIndex(index)}
+                aria-pressed={isSelected}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.99 }}
+                className={`flex min-h-24 flex-col justify-between border p-4 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-[#aa9258] focus:ring-offset-2 ${isSelected ? "border-[#aa9258] bg-[#e8ece2] shadow-sm" : "border-[#ddd6c3] bg-[#f8f7ef] hover:border-[#b9a66f]"}`}
+              >
+                <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-[#9a8450]">Movie gift · 0{index + 1}</span>
+                <span className="mt-2 font-serif text-lg italic text-[#405747]">{gift.title}</span>
+                <span className={`mt-3 text-[8px] font-semibold uppercase tracking-[0.16em] ${isAvailable ? "text-[#647756]" : "text-[#968b6b]"}`}>{isAvailable ? "Ready to play" : "Add movie source"}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+      </motion.section>
 
       {!hasSource && (
         <motion.div
@@ -929,9 +1073,9 @@ function MovieGiftPage() {
             </code>{" "}
             and set{" "}
             <code className="rounded bg-[#e9ece4] px-1.5 py-0.5 text-[#59675a]">
-              movieGift.source
+              movieGifts[index].source
             </code>{" "}
-            in this component. You can also use a public, embeddable video URL.
+            in the movieGifts array above. You can also use a public, embeddable video URL.
             Make sure the movie is licensed or otherwise available for free
             viewing.
           </p>
@@ -1200,7 +1344,7 @@ export default function WeddingInvitation() {
                 </div>
               </aside>
 
-              <section className="relative min-h-162.5 overflow-hidden border border-[#d6d7ca] bg-[#f7f7ef] px-5 py-8 sm:px-9 sm:py-10 lg:min-h-[calc(100vh-64px)] lg:px-10 lg:py-12 xl:px-14 xl:py-14">
+              <section className="relative h-auto min-h-162.5 max-h-none overflow-visible border border-[#d6d7ca] bg-[#f7f7ef] px-5 py-8 sm:px-9 sm:py-10 lg:min-h-[calc(100vh-64px)] lg:px-10 lg:py-12 xl:px-14 xl:py-14">
                 <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-[radial-linear(circle,rgba(198,192,158,0.15),transparent_70%)]" />
                 <div className="relative z-10 mb-8 flex items-center justify-between border-b border-[#e1dece] pb-4">
                   <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#9a8450]">
